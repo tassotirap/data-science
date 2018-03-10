@@ -1,0 +1,10 @@
+
+TypeError: FloatClassNLLCriterion_updateOutput received an invalid combination of arguments - 
+
+got 
+
+(int, torch.FloatTensor, !torch.FloatTensor!, torch.FloatTensor, bool, NoneType, torch.FloatTensor, int), 
+
+but expected 
+
+(int state, torch.FloatTensor input, torch.LongTensor target, torch.FloatTensor output, bool sizeAverage, [torch.FloatTensor weights or None], torch.FloatTensor total_weight, int ignore_index)
