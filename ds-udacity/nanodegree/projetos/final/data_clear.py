@@ -19,6 +19,25 @@ class DataClear:
         df['PASSAGEIROS_TOTAL'] = (df['PASSAGEIROS PAGOS'] + df['PASSAGEIROS GRÁTIS'])
         return df
 
+    def createEmptyRows(self, df):
+        for year in range(2000, 2018):
+            for month in range(1, 13):
+                for origin in ['SUL', 'SUDESTE', 'NORTE', 'NORDESTE', 'CENTRO-OESTE']:
+                    for destiny in ['AMÉRICA CENTRAL', 'AMÉRICA DO NORTE', 'AMÉRICA DO SUL', 'EUROPA', 'ÁFRICA', 'ÁSIA']:
+                        if destiny == 'AMÉRICA DO SUL':
+                            if df[(df['ANO'] == year) & (df['MES'] == month) & (df['ORIGEM'] == origin) & (df['DESTINO'] == destiny) & (df['INTER'] == True)].empty:
+                                df = df.append({ 'ANO': year, 'MES': month, 'ORIGEM': origin, 'DESTINO': destiny, 'INTER': True, 'PASSAGEIROS': 0}, ignore_index=True)
+                                print('Added {}'.format({ 'ANO': year, 'MES': month, 'ORIGEM': origin, 'DESTINO': destiny, 'INTER': True, 'PASSAGEIROS': 0}))
+                            if df[(df['ANO'] == year) & (df['MES'] == month) & (df['ORIGEM'] == origin) & (df['DESTINO'] == destiny) & (df['INTER'] == False)].empty:
+                                df = df.append({ 'ANO': year, 'MES': month, 'ORIGEM': origin, 'DESTINO': destiny, 'INTER': False, 'PASSAGEIROS': 0}, ignore_index=True)
+                                print('Added {}'.format({ 'ANO': year, 'MES': month, 'ORIGEM': origin, 'DESTINO': destiny, 'INTER': False, 'PASSAGEIROS': 0}))
+                        else:    
+                            if df[(df['ANO'] == year) & (df['MES'] == month) & (df['ORIGEM'] == origin) & (df['DESTINO'] == destiny)].empty:
+                                df = df.append({ 'ANO': year, 'MES': month, 'ORIGEM': origin, 'DESTINO': destiny, 'INTER': True, 'PASSAGEIROS': 0}, ignore_index=True)
+                                print('Added {}'.format({ 'ANO': year, 'MES': month, 'ORIGEM': origin, 'DESTINO': destiny, 'INTER': True, 'PASSAGEIROS': 0}))
+            
+        return df
+
     # Método para remover as colunas que não iremos utilizar
     def removeNotUsedColumns(self, df):
         return df.drop([
@@ -71,6 +90,7 @@ class DataClear:
         df = df[df['ASSENTOS'] > 90] # mínimo de 120 lugares (aviões comerciais)
         df = df[df['PASSAGEIROS_VOO'] > 30] # mínimo de 30 (aviões comerciais)
         df = df[df['DECOLAGENS'] > 0]
+        df = df[df['ANO'] <= 2017]
         return df
 
     def convertTypes(self, df):
